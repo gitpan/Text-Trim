@@ -1,0 +1,16 @@
+---
+name: Text-Trim
+version: 1.00
+author:
+  - 'Matt Lawrence E<lt>mattlaw@cpan.orgE<gt>'
+abstract: remove leading and trailing whitespace from strings
+license: perl
+requires:
+  perl: 5
+build_requires:
+  Test::More: 0
+provides:
+  Text::Trim:
+    file: lib/Text/Trim.pm
+    version: 1.00
+generated_by: Module::Build version 0.2611
