@@ -1,5 +1,5 @@
 NAME
-    Text::Trim - remove leading and trailing whitespace from strings
+    Text::Trim - remove leading and/or trailing whitespace from strings
 
 SYNOPSIS
         use Text::Trim;
@@ -9,7 +9,7 @@ SYNOPSIS
         # now $data contains "important data" and $text is unchanged
     
         # or:
-        trim $text; # work in place, $text now contains "important data"
+        trim $text; # work in-place, $text now contains "important data"
 
         @lines = <STDIN>;
         rtrim @lines; # remove trailing whitespace from all lines
@@ -17,6 +17,7 @@ SYNOPSIS
         # Alternatively:
         @lines = rtrim <STDIN>;
 
+        # Or even:
         while (<STDIN>) {
             trim; # Change $_ in place
             # ...
@@ -24,7 +25,8 @@ SYNOPSIS
 
 DESCRIPTION
     This module provides functions for removing leading and/or trailing
-    whitespace from strings.
+    whitespace from strings. It is basically a wrapper around some simple
+    regexes with a flexible context-based interface.
 
 EXPORTS
     All functions are exported by default.
@@ -80,6 +82,22 @@ FUNCTIONS
   ltrim
     Like trim() but removes only leading (left) whitespace.
 
+UNICODE
+    Because this module is implemented using perl regular expressions, it is
+    capable of recognising and removing unicode whitespace characters (such
+    as non-breaking spaces) from scalars with the utf8 flag on. See Encode
+    for details about the utf8 flag.
+
+    Note that this only applies in the case of perl versions after 5.8.0 or
+    so.
+
+SEE ALSO
+    Brent B. Powers' String::Strip performs a similar function in XS.
+
 AUTHOR
     Matt Lawrence <mattlaw@cpan.org>
+
+ACKNOWLEDGEMENTS
+    Terrence Brannon <metaperl@gmail.com> for bringing my attention to
+    String::Strip and suggesting documentation changes.
 
