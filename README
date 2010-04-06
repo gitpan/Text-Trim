@@ -1,14 +1,17 @@
 NAME
     Text::Trim - remove leading and/or trailing whitespace from strings
 
+VERSION
+    version 1.02
+
 SYNOPSIS
         use Text::Trim;
 
         $text = "\timportant data\n";
         $data = trim $text;
         # now $data contains "important data" and $text is unchanged
-    
-        # or:
+        
+    # or:
         trim $text; # work in-place, $text now contains "important data"
 
         @lines = <STDIN>;
@@ -70,6 +73,19 @@ CONTEXT HANDLING
 
         $trimmed = rtrim;
         # $trimmed = $_ minus trailing whitespace
+
+  Undefined values
+    If any of the functions are called with undefined values, the behaviour
+    is in general to pass them through unchanged. When stringifying a list
+    (calling in scalar context with multiple arguments) undefined elements
+    are excluded, but if all elements are undefined then the return value is
+    also undefined.
+
+        $foo = trim(undef);        # $foo is undefined
+        $foo = trim(undef, undef); # $foo is undefined
+        @foo = trim(undef, undef); # @foo contains 2 undefined values
+        trim(@foo)                 # @foo still contains 2 undefined values
+        $foo = trim('', undef);    # $foo is ''
 
 FUNCTIONS
   trim

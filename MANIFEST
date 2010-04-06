@@ -9,4 +9,5 @@ t/01..trim.t
 t/02..ltrim.t
 t/03..rtrim.t
 t/04..unicode.t
+t/05..undef.t
 t/99..pod.t

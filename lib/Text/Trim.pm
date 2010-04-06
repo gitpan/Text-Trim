@@ -3,11 +3,17 @@ package Text::Trim;
 use strict;
 use warnings;
 
-our $VERSION = '1.01';
-
 =head1 NAME
 
 Text::Trim - remove leading and/or trailing whitespace from strings
+
+=head1 VERSION
+
+version 1.02
+
+=cut
+
+our $VERSION = '1.02';
 
 =head1 SYNOPSIS
 
@@ -91,6 +97,19 @@ this, make sure you only use single arguments when calling in scalar context.
     $trimmed = rtrim;
     # $trimmed = $_ minus trailing whitespace
 
+=head2 Undefined values
+
+If any of the functions are called with undefined values, the behaviour is in
+general to pass them through unchanged. When stringifying a list (calling in
+scalar context with multiple arguments) undefined elements are excluded, but
+if all elements are undefined then the return value is also undefined.
+
+    $foo = trim(undef);        # $foo is undefined
+    $foo = trim(undef, undef); # $foo is undefined
+    @foo = trim(undef, undef); # @foo contains 2 undefined values
+    trim(@foo)                 # @foo still contains 2 undefined values
+    $foo = trim('', undef);    # $foo is ''
+
 =head1 FUNCTIONS
 
 =head2 trim
@@ -103,9 +122,11 @@ provided.
 sub trim {
     @_ = @_ ? @_ : $_ if defined wantarray;
 
-    for (@_ ? @_ : $_) { s/\A\s+//; s/\s+\z// }
+    for (@_ ? @_ : $_) { next unless defined; s/\A\s+//; s/\s+\z// }
 
-    return wantarray ? @_ : "@_";
+    return @_ if wantarray || !defined wantarray;
+
+    if (my @def = grep defined, @_) { return "@def" } else { return }
 }
 
 =head2 rtrim 
@@ -117,9 +138,11 @@ Like trim() but removes only trailing (right) whitespace.
 sub rtrim {
     @_ = @_ ? @_ : $_ if defined wantarray;
 
-    for (@_ ? @_ : $_) { s/\s+\z// }
+    for (@_ ? @_ : $_) { next unless defined; s/\s+\z// }
 
-    return wantarray ? @_ : "@_";
+    return @_ if wantarray || !defined wantarray;
+
+    if (my @def = grep defined, @_) { return "@def" } else { return }
 }
 
 =head2 ltrim
@@ -131,9 +154,11 @@ Like trim() but removes only leading (left) whitespace.
 sub ltrim {
     @_ = @_ ? @_ : $_ if defined wantarray;
 
-    for (@_ ? @_ : $_) { s/\A\s+// }
+    for (@_ ? @_ : $_) { next unless defined; s/\A\s+// }
 
-    return wantarray ? @_ : "@_";
+    return @_ if wantarray || !defined wantarray;
+
+    if (my @def = grep defined, @_) { return "@def" } else { return }
 }
 
 1;
